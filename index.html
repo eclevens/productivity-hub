@@ -1,30 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Weather App</title>
+
+    <title>Weather App</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
 </head>
 
 <body>
-    <div class="content">
+
+    <button id="menuBtn">☰</button>
+
+    <div id="sideMenu" class="side-menu">
+
+        <button class="menuItem" id="openSearch">
+            Change Location
+        </button>
+
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <div id="searchModal" class="modal">
+
+        <button class="closeModal" id="closeSearch">
+            ×
+        </button>
+
+        <h2>Search Location</h2>
 
         <input id="cityInput" placeholder="Enter city" autocomplete="off">
 
         <div id="suggestions"></div>
 
-        <!--<button id="searchBtn">Search</button>-->
+    </div>
 
-        <p id="time"></p>
-        <p id="weather">--</p>
-        <p id="location"></p>
-        <p id="condition"></p>
-        <p id="wind"></p>
-        <p id="feelslike"></p>
-        <p id="precipitationprobability"></p>
+    <div class="content">
+
+        <div class="weatherCard">
+
+            <div class="topInfo">
+
+                <p id="time"></p>
+
+                <p id="location"></p>
+
+            </div>
+
+            <div class="mainWeather">
+
+                <p id="weather">--</p>
+
+                <i id="weatherIcon" data-lucide="cloud"></i>
+
+            </div>
+
+            <p id="feelslike"></p>
+
+            <div class="weatherDetails">
+
+                <p id="condition"></p>
+
+                <p id="wind"></p>
+
+                <p id="precipitationprobability"></p>
+
+            </div>
+
+        </div>
 
     </div>
 
     <script src="main.js"></script>
+
 </body>
+
 </html>
