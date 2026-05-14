@@ -4,15 +4,16 @@ body {
     background: #13140f;
     color: white;
 
-    height: 100vh;
+    min-height: 100dvh;
     overflow: hidden;
+
+    -webkit-text-size-adjust: 100%;
 
     opacity: 0;
     animation: pageFadeIn 0.6s ease forwards;
 }
 
 @keyframes pageFadeIn {
-
     from {
         opacity: 0;
         transform: scale(1.01);
@@ -24,6 +25,7 @@ body {
     }
 }
 
+/* layout wrapper */
 .content {
     position: fixed;
     inset: 0;
@@ -33,8 +35,11 @@ body {
     justify-content: center;
 
     padding: 1rem;
+
+    overflow: hidden;
 }
 
+/* main card */
 .weatherCard {
     width: min(26rem, 92vw);
 
@@ -62,6 +67,7 @@ body {
     line-height: 1.05;
 }
 
+/* hamburger */
 #menuBtn {
     position: fixed;
     top: 1rem;
@@ -79,12 +85,15 @@ body {
     z-index: 3000;
 
     transition: 0.2s ease;
+
+    touch-action: manipulation;
 }
 
 #menuBtn:hover {
     opacity: 0.8;
 }
 
+/* side menu */
 .side-menu {
     position: fixed;
 
@@ -92,7 +101,7 @@ body {
     left: -21rem;
 
     width: min(18rem, 80vw);
-    height: 100vh;
+    height: 100dvh;
 
     background: #1a1a24;
 
@@ -134,6 +143,7 @@ body {
     background: #343448;
 }
 
+/* overlay */
 .overlay {
     position: fixed;
     inset: 0;
@@ -153,6 +163,7 @@ body {
     pointer-events: auto;
 }
 
+/* modal */
 .modal {
     position: fixed;
     inset: 0;
@@ -188,6 +199,7 @@ body {
     pointer-events: auto;
 }
 
+/* close button */
 .closeModal {
     position: absolute;
 
@@ -208,6 +220,7 @@ body {
     line-height: 1;
 }
 
+/* search */
 #searchModal {
     padding-top: 4rem;
 }
@@ -217,12 +230,13 @@ body {
     font-size: clamp(1.3rem, 5vw, 1.8rem);
 }
 
+/* input (important for mobile zoom fix) */
 input {
     width: min(30rem, 100%);
 
     padding: 0.8rem 1rem;
 
-    font-size: 0.95rem;
+    font-size: 16px; /* prevents iOS zoom */
 
     border-radius: 0.8rem;
     border: 1px solid #333;
@@ -239,6 +253,7 @@ input:focus {
     border-color: #666;
 }
 
+/* suggestions */
 #suggestions {
     width: min(30rem, 100%);
 }
@@ -258,6 +273,7 @@ input:focus {
     background: #2a2a3a;
 }
 
+/* top section */
 .topInfo {
     display: flex;
     flex-direction: column;
@@ -281,6 +297,7 @@ input:focus {
     max-width: 90%;
 }
 
+/* weather block */
 .mainWeather {
     display: flex;
     flex-direction: column;
@@ -309,6 +326,7 @@ input:focus {
     margin-top: -0.15rem;
 }
 
+/* feels like */
 #feelslike {
     font-size: clamp(0.72rem, 2.6vw, 0.9rem);
 
@@ -318,6 +336,7 @@ input:focus {
     margin-bottom: 1rem;
 }
 
+/* details */
 .weatherDetails {
     display: flex;
     flex-direction: column;
@@ -333,6 +352,7 @@ input:focus {
     opacity: 0.72;
 }
 
+/* mobile tuning */
 @media (max-width: 480px) {
 
     .weatherCard {
