@@ -34,9 +34,7 @@ const DEFAULT_VIDEO = "clear-day";
 // auto refresh
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
-// -----------------------------
-// VIDEO BACKGROUND
-// -----------------------------
+// bg vid
 
 function setBackgroundVideo(name) {
     const src = `assets/background-video/${name}.mp4`;
@@ -61,9 +59,7 @@ function setBackgroundVideo(name) {
     }, 200);
 }
 
-// -----------------------------
-// UI MODALS
-// -----------------------------
+// modals
 
 function openModal(modal) {
     modal.classList.add("show");
@@ -101,9 +97,7 @@ overlay.onclick = closeAll;
 openSearch.onclick = () => openModal(searchModal);
 closeSearch.onclick = closeAll;
 
-// -----------------------------
-// LANDING LOGIC
-// -----------------------------
+// landing
 
 function showLanding() {
     landing.classList.add("show");
@@ -118,9 +112,7 @@ selectLocationBtn.onclick = () => {
     openModal(searchModal);
 };
 
-// -----------------------------
-// LOAD SAVED LOCATION
-// -----------------------------
+// load location
 
 window.addEventListener("load", () => {
     setBackgroundVideo(DEFAULT_VIDEO);
@@ -140,9 +132,7 @@ window.addEventListener("load", () => {
     }
 });
 
-// -----------------------------
-// SEARCH
-// -----------------------------
+// search
 
 cityInput.addEventListener("input", updateSuggestions);
 
@@ -190,9 +180,7 @@ async function updateSuggestions() {
     });
 }
 
-// -----------------------------
-// WEATHER TYPES
-// -----------------------------
+// weather types
 
 function getWeatherType(code) {
     if (code === 0) return "clear";
@@ -206,18 +194,14 @@ function getWeatherType(code) {
     return "cloudy";
 }
 
-// -----------------------------
-// DAY / NIGHT
-// -----------------------------
+// day/night
 
 function isDay(sunrise, sunset) {
     const now = Date.now();
     return now >= sunrise * 1000 && now <= sunset * 1000;
 }
 
-// -----------------------------
-// VIDEO SELECTOR
-// -----------------------------
+// select video
 
 function getVideoName(type, dayTime) {
     if (type === "clear") return dayTime ? "clear-day" : "clear-night";
@@ -229,9 +213,7 @@ function getVideoName(type, dayTime) {
     return dayTime ? "cloudy-day" : "cloudy-night";
 }
 
-// -----------------------------
-// ICONS
-// -----------------------------
+// icons
 
 function setIcon(iconName) {
     weatherIcon.innerHTML = "";
@@ -242,9 +224,7 @@ function setIcon(iconName) {
     });
 }
 
-// -----------------------------
-// WEATHER FETCH
-// -----------------------------
+// weather fetch
 
 async function getWeather(place) {
     if (!place) return;
@@ -296,9 +276,7 @@ async function getWeather(place) {
     }
 }
 
-// -----------------------------
-// CLOCK
-// -----------------------------
+// clock
 
 function updateClock() {
     const now = new Date();

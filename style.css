@@ -16,7 +16,6 @@
     position: fixed;
     inset: 0;
 
-    /* slightly warmer neutral overlay (kills blue/purple cast) */
     background: rgba(0, 0, 0, 0.28);
 
     z-index: -1;
@@ -24,7 +23,7 @@
 }
 
 html {
-    background-color: #0f0f10; /* less blue, more neutral black */
+    background-color: #0f0f10; 
     font-family: 'Inter', sans-serif;
 }
 
@@ -56,10 +55,6 @@ body {
     }
 }
 
-/* -----------------------------
-   MAIN CONTENT
------------------------------- */
-
 .content {
     position: fixed;
     inset: 0;
@@ -78,7 +73,6 @@ body {
 
     padding: clamp(1rem, 3vw, 1.6rem);
 
-    /* warmer glass instead of cool bluish glass */
     background: rgba(20, 20, 20, 0.55);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -101,10 +95,6 @@ body {
     margin: 0;
     line-height: 1.05;
 }
-
-/* -----------------------------
-   MENU
------------------------------- */
 
 #menuBtn {
     position: fixed;
@@ -146,7 +136,6 @@ body {
     z-index: 2000;
     box-sizing: border-box;
 
-    /* unified glass tone */
     background: rgba(18, 18, 18, 0.6);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -183,10 +172,6 @@ body {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* -----------------------------
-   OVERLAY SYSTEM
------------------------------- */
-
 .overlay {
     position: fixed;
     inset: 0;
@@ -205,10 +190,6 @@ body {
     opacity: 1;
     pointer-events: auto;
 }
-
-/* -----------------------------
-   MODAL
------------------------------- */
 
 .modal {
     position: fixed;
@@ -261,10 +242,6 @@ body {
     z-index: 4000;
 }
 
-/* -----------------------------
-   INPUT
------------------------------- */
-
 input {
     width: min(30rem, 100%);
 
@@ -304,10 +281,6 @@ input:focus {
 #suggestions div:hover {
     background: rgba(255, 255, 255, 0.08);
 }
-
-/* -----------------------------
-   WEATHER TEXT
------------------------------- */
 
 .topInfo {
     display: flex;
@@ -368,9 +341,6 @@ input:focus {
     opacity: 0.7;
 }
 
-/* -----------------------------
-   VIGNETTE (softened)
------------------------------- */
 
 .vignette {
     position: fixed;
@@ -384,10 +354,6 @@ input:focus {
         rgba(0, 0, 0, 0.5) 100%
     );
 }
-
-/* -----------------------------
-   LANDING
------------------------------- */
 
 .landing {
     position: fixed;
@@ -422,10 +388,6 @@ input:focus {
     border: none;
     cursor: pointer;
 }
-
-/* -----------------------------
-   MOBILE
------------------------------- */
 
 @media (max-width: 480px) {
 
