@@ -1,8 +1,39 @@
+#bgVideo {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    z-index: -2;
+    pointer-events: none;
+
+    opacity: 1;
+    transition: opacity 0.8s ease;
+}
+
+.bgOverlay {
+    position: fixed;
+    inset: 0;
+
+    /* slightly warmer neutral overlay (kills blue/purple cast) */
+    background: rgba(0, 0, 0, 0.28);
+
+    z-index: -1;
+    pointer-events: none;
+}
+
+html {
+    background-color: #0f0f10; /* less blue, more neutral black */
+    font-family: 'Inter', sans-serif;
+}
+
 body {
     margin: 0;
-    font-family: sans-serif;
-    background: #13140f;
-    color: white;
+    font-family: 'Inter', sans-serif;
+
+    background: transparent;
+    color: #f2f2f2;
 
     min-height: 100dvh;
     overflow: hidden;
@@ -25,7 +56,10 @@ body {
     }
 }
 
-/* layout wrapper */
+/* -----------------------------
+   MAIN CONTENT
+------------------------------ */
+
 .content {
     position: fixed;
     inset: 0;
@@ -39,16 +73,17 @@ body {
     overflow: hidden;
 }
 
-/* main card */
 .weatherCard {
     width: min(26rem, 92vw);
 
     padding: clamp(1rem, 3vw, 1.6rem);
 
-    background: rgba(26, 26, 36, 0.72);
-    backdrop-filter: blur(12px);
+    /* warmer glass instead of cool bluish glass */
+    background: rgba(20, 20, 20, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 1.2rem;
 
     display: flex;
@@ -67,7 +102,10 @@ body {
     line-height: 1.05;
 }
 
-/* hamburger */
+/* -----------------------------
+   MENU
+------------------------------ */
+
 #menuBtn {
     position: fixed;
     top: 1rem;
@@ -78,22 +116,19 @@ body {
     background: none;
     border: none;
 
-    color: white;
+    color: #f2f2f2;
 
     cursor: pointer;
 
-    z-index: 3000;
+    z-index: 1900;
 
     transition: 0.2s ease;
-
-    touch-action: manipulation;
 }
 
 #menuBtn:hover {
     opacity: 0.8;
 }
 
-/* side menu */
 .side-menu {
     position: fixed;
 
@@ -103,16 +138,21 @@ body {
     width: min(18rem, 80vw);
     height: 100dvh;
 
-    background: #1a1a24;
-
     padding: 1rem;
     padding-top: 3.5rem;
 
     transition: 0.3s ease;
 
     z-index: 2000;
-
     box-sizing: border-box;
+
+    /* unified glass tone */
+    background: rgba(18, 18, 18, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
 .side-menu.open {
@@ -126,10 +166,10 @@ body {
     margin-top: 1rem;
     padding: 0.75rem;
 
-    background: #2a2a3a;
-    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    color: #f2f2f2;
 
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 0.7rem;
 
     cursor: pointer;
@@ -140,15 +180,18 @@ body {
 }
 
 .menuItem:hover {
-    background: #343448;
+    background: rgba(255, 255, 255, 0.1);
 }
 
-/* overlay */
+/* -----------------------------
+   OVERLAY SYSTEM
+------------------------------ */
+
 .overlay {
     position: fixed;
     inset: 0;
 
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.45);
 
     opacity: 0;
     pointer-events: none;
@@ -163,12 +206,15 @@ body {
     pointer-events: auto;
 }
 
-/* modal */
+/* -----------------------------
+   MODAL
+------------------------------ */
+
 .modal {
     position: fixed;
     inset: 0;
 
-    background: #0f0f14;
+    background: #0f0f10;
 
     padding: 2rem 1rem;
 
@@ -185,21 +231,18 @@ body {
 
     transition: 0.25s ease;
 
-    z-index: 2500;
+    z-index: 2000;
 
     overflow-y: auto;
-
     box-sizing: border-box;
 }
 
 .modal.show {
     opacity: 1;
     transform: scale(1);
-
     pointer-events: auto;
 }
 
-/* close button */
 .closeModal {
     position: absolute;
 
@@ -209,51 +252,40 @@ body {
     background: none;
     border: none;
 
-    color: white;
+    color: #f2f2f2;
 
     font-size: 1.8rem;
 
     cursor: pointer;
 
     z-index: 4000;
-
-    line-height: 1;
 }
 
-/* search */
-#searchModal {
-    padding-top: 4rem;
-}
+/* -----------------------------
+   INPUT
+------------------------------ */
 
-#searchModal h2 {
-    margin: 0;
-    font-size: clamp(1.3rem, 5vw, 1.8rem);
-}
-
-/* input (important for mobile zoom fix) */
 input {
     width: min(30rem, 100%);
 
     padding: 0.8rem 1rem;
 
-    font-size: 16px; /* prevents iOS zoom */
+    font-size: 16px;
 
     border-radius: 0.8rem;
-    border: 1px solid #333;
 
-    background: #1a1a24;
-    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
-    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.04);
+    color: #f2f2f2;
 
     outline: none;
 }
 
 input:focus {
-    border-color: #666;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* suggestions */
 #suggestions {
     width: min(30rem, 100%);
 }
@@ -270,34 +302,31 @@ input:focus {
 }
 
 #suggestions div:hover {
-    background: #2a2a3a;
+    background: rgba(255, 255, 255, 0.08);
 }
 
-/* top section */
+/* -----------------------------
+   WEATHER TEXT
+------------------------------ */
+
 .topInfo {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     gap: 0.15rem;
 }
 
 #time {
     font-size: clamp(1.9rem, 8vw, 3.1rem);
-    font-weight: 600;
-
-    letter-spacing: -0.06em;
+    font-weight: 500;
+    letter-spacing: -0.04em;
 }
 
 #location {
     font-size: clamp(0.72rem, 2.5vw, 0.88rem);
-
-    opacity: 0.68;
-
-    max-width: 90%;
+    opacity: 0.7;
 }
 
-/* weather block */
 .mainWeather {
     display: flex;
     flex-direction: column;
@@ -309,38 +338,26 @@ input:focus {
 
 #weather {
     font-size: clamp(3.3rem, 16vw, 5.5rem);
-
     font-weight: 700;
-
-    letter-spacing: -0.08em;
-
-    line-height: 0.9;
+    letter-spacing: -0.04em;
 }
 
 #weatherIcon {
     width: clamp(4rem, 14vw, 5.5rem);
     height: clamp(4rem, 14vw, 5.5rem);
-
     stroke-width: 2.3;
-
-    margin-top: -0.15rem;
 }
 
-/* feels like */
 #feelslike {
     font-size: clamp(0.72rem, 2.6vw, 0.9rem);
-
-    opacity: 0.62;
-
+    opacity: 0.6;
     margin-top: 0.2rem;
     margin-bottom: 1rem;
 }
 
-/* details */
 .weatherDetails {
     display: flex;
     flex-direction: column;
-
     gap: 0.12rem;
 }
 
@@ -348,17 +365,73 @@ input:focus {
 #wind,
 #precipitationprobability {
     font-size: clamp(0.72rem, 2.5vw, 0.86rem);
-
-    opacity: 0.72;
+    opacity: 0.7;
 }
 
-/* mobile tuning */
+/* -----------------------------
+   VIGNETTE (softened)
+------------------------------ */
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background: radial-gradient(
+        circle at center,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0.5) 100%
+    );
+}
+
+/* -----------------------------
+   LANDING
+------------------------------ */
+
+.landing {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 1rem;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    z-index: 1200;
+
+    text-align: center;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.landing.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.landing button {
+    padding: 0.8rem 1.2rem;
+    border-radius: 0.8rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* -----------------------------
+   MOBILE
+------------------------------ */
+
 @media (max-width: 480px) {
 
     .weatherCard {
         width: 100%;
         padding: 1rem 0.9rem;
-
         border-radius: 1rem;
     }
 

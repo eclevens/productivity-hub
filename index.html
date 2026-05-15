@@ -15,11 +15,23 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+
 </head>
 
 <body>
 
     <button id="menuBtn">☰</button>
+
+    <div id="landing" class="landing">
+        <h1>Welcome</h1>
+        <p>Select a location to get started</p>
+        <button id="selectLocationBtn">Select Location</button>
+    </div>
 
     <div id="sideMenu" class="side-menu">
 
@@ -48,41 +60,31 @@
     <div class="content">
 
         <div class="weatherCard">
-
             <div class="topInfo">
-
                 <p id="time"></p>
-
                 <p id="location"></p>
-
             </div>
 
             <div class="mainWeather">
-
                 <p id="weather">--</p>
-
                 <i id="weatherIcon" data-lucide="cloud"></i>
-
             </div>
 
             <p id="feelslike"></p>
 
             <div class="weatherDetails">
-
                 <p id="condition"></p>
-
                 <p id="wind"></p>
-
                 <p id="precipitationprobability"></p>
-
             </div>
-
         </div>
-
     </div>
 
-    <script src="main.js"></script>
+    <div class="vignette"></div>
+    <video id="bgVideo" autoplay muted loop playsinline></video>
+    <div class="bgOverlay"></div>
 
+    <script src="main.js"></script>
 </body>
 
 </html>

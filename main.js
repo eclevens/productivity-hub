@@ -20,12 +20,51 @@ const openSearch = document.getElementById("openSearch");
 const searchModal = document.getElementById("searchModal");
 const closeSearch = document.getElementById("closeSearch");
 
+const bgVideo = document.getElementById("bgVideo");
+
+// landing UI
+const landing = document.getElementById("landing");
+const selectLocationBtn = document.getElementById("selectLocationBtn");
+
 let selectedPlace = null;
+let hasLocation = false;
+
+const DEFAULT_VIDEO = "clear-day";
 
 // auto refresh
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
-// modal control
+// -----------------------------
+// VIDEO BACKGROUND
+// -----------------------------
+
+function setBackgroundVideo(name) {
+    const src = `assets/background-video/${name}.mp4`;
+
+    if (bgVideo.dataset.current === src) return;
+
+    bgVideo.dataset.current = src;
+
+    bgVideo.style.opacity = 0;
+
+    setTimeout(() => {
+        bgVideo.src = src;
+        bgVideo.load();
+
+        bgVideo.oncanplay = () => {
+            bgVideo.style.opacity = 1;
+        };
+
+        bgVideo.onerror = () => {
+            bgVideo.src = `assets/background-video/${DEFAULT_VIDEO}.mp4`;
+        };
+    }, 200);
+}
+
+// -----------------------------
+// UI MODALS
+// -----------------------------
+
 function openModal(modal) {
     modal.classList.add("show");
     overlay.classList.add("show");
@@ -38,7 +77,6 @@ function closeModal(modal) {
     document.body.style.overflow = "";
 }
 
-// close everything
 function closeAll() {
     sideMenu.classList.remove("open");
     searchModal.classList.remove("show");
@@ -59,32 +97,57 @@ menuBtn.onclick = () => {
 };
 
 overlay.onclick = closeAll;
+
 openSearch.onclick = () => openModal(searchModal);
 closeSearch.onclick = closeAll;
 
-// load saved location
+// -----------------------------
+// LANDING LOGIC
+// -----------------------------
+
+function showLanding() {
+    landing.classList.add("show");
+    setBackgroundVideo(DEFAULT_VIDEO);
+}
+
+function hideLanding() {
+    landing.classList.remove("show");
+}
+
+selectLocationBtn.onclick = () => {
+    openModal(searchModal);
+};
+
+// -----------------------------
+// LOAD SAVED LOCATION
+// -----------------------------
+
 window.addEventListener("load", () => {
+    setBackgroundVideo(DEFAULT_VIDEO);
+
     closeAll();
 
     const saved = localStorage.getItem("selectedPlace");
+
     if (saved) {
         selectedPlace = JSON.parse(saved);
+        hasLocation = true;
+        hideLanding();
         getWeather(selectedPlace);
+    } else {
+        hasLocation = false;
+        showLanding();
     }
 });
 
-// auto refresh
-setInterval(() => {
-    if (selectedPlace) getWeather(selectedPlace);
-}, REFRESH_INTERVAL);
+// -----------------------------
+// SEARCH
+// -----------------------------
 
-// input
 cityInput.addEventListener("input", updateSuggestions);
 
-// suggestions
 async function updateSuggestions() {
     const query = cityInput.value.trim();
-    selectedPlace = null;
 
     if (query.length < 2) {
         suggestionsBox.innerHTML = "";
@@ -111,11 +174,14 @@ async function updateSuggestions() {
 
         div.onclick = () => {
             selectedPlace = place;
+            hasLocation = true;
+
             cityInput.value = label;
             suggestionsBox.innerHTML = "";
 
             localStorage.setItem("selectedPlace", JSON.stringify(place));
 
+            hideLanding();
             getWeather(place);
             closeAll();
         };
@@ -124,36 +190,51 @@ async function updateSuggestions() {
     });
 }
 
-// weather mapping
+// -----------------------------
+// WEATHER TYPES
+// -----------------------------
+
 function getWeatherType(code) {
     if (code === 0) return "clear";
     if (code <= 3) return "cloudy";
-    if (code >= 45 && code <= 48) return "fog";
-    if (code >= 51 && code <= 55) return "drizzle";
+    if (code >= 45 && code <= 48) return "cloudy";
+    if (code >= 51 && code <= 55) return "rain";
     if (code >= 61 && code <= 65) return "rain";
     if (code >= 71 && code <= 77) return "snow";
     if (code >= 80 && code <= 82) return "rain";
     if (code >= 95) return "storm";
-    return "cloud";
+    return "cloudy";
 }
 
-// icon mapping
-function getWeatherIcon(type) {
-    if (type === "clear") return "sun";
-    if (type === "cloudy") return "cloud";
-    if (type === "fog") return "cloud-fog";
-    if (type === "drizzle") return "cloud-drizzle";
-    if (type === "rain") return "cloud-rain";
-    if (type === "snow") return "cloud-snow";
-    if (type === "storm") return "cloud-lightning";
-    return "cloud";
+// -----------------------------
+// DAY / NIGHT
+// -----------------------------
+
+function isDay(sunrise, sunset) {
+    const now = Date.now();
+    return now >= sunrise * 1000 && now <= sunset * 1000;
 }
 
-// icons
+// -----------------------------
+// VIDEO SELECTOR
+// -----------------------------
+
+function getVideoName(type, dayTime) {
+    if (type === "clear") return dayTime ? "clear-day" : "clear-night";
+    if (type === "cloudy") return dayTime ? "cloudy-day" : "cloudy-night";
+    if (type === "rain") return dayTime ? "rain-day" : "rain-night";
+    if (type === "snow") return dayTime ? "snow-day" : "snow-night";
+    if (type === "storm") return dayTime ? "storm-day" : "storm-night";
+
+    return dayTime ? "cloudy-day" : "cloudy-night";
+}
+
+// -----------------------------
+// ICONS
+// -----------------------------
+
 function setIcon(iconName) {
-
     weatherIcon.innerHTML = "";
-
     weatherIcon.setAttribute("data-lucide", iconName);
 
     lucide.createIcons({
@@ -161,41 +242,64 @@ function setIcon(iconName) {
     });
 }
 
-// weather fetch
+// -----------------------------
+// WEATHER FETCH
+// -----------------------------
+
 async function getWeather(place) {
     if (!place) return;
 
-    const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation_probability&temperature_unit=fahrenheit`
-    );
+    try {
+        const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation_probability&daily=sunrise,sunset&temperature_unit=fahrenheit`
+        );
 
-    const data = await res.json();
+        const data = await res.json();
 
-    const temp = data.current.temperature_2m;
-    const feels = data.current.apparent_temperature;
-    const wind = data.current.wind_speed_10m;
-    const precip = data.current.precipitation_probability;
+        const temp = data.current.temperature_2m;
+        const feels = data.current.apparent_temperature;
+        const wind = data.current.wind_speed_10m;
+        const precip = data.current.precipitation_probability;
 
-    const type = getWeatherType(data.current.weather_code);
-    const iconName = getWeatherIcon(type);
+        const type = getWeatherType(data.current.weather_code);
 
-    weatherText.textContent = `${temp}°F`;
-    feelsLikeText.textContent = `Feels like ${feels}°F`;
-    windText.textContent = `Wind ${wind} mph`;
-    precipitationText.textContent = `Precipitation ${precip}%`;
-    conditionText.textContent = type;
+        let dayTime = true;
 
-    locationText.textContent =
-        `${place.name}${place.admin1 ? ", " + place.admin1 : ""}, ${place.country}`;
+        if (data.daily?.sunrise?.[0] && data.daily?.sunset?.[0]) {
+            dayTime = isDay(data.daily.sunrise[0], data.daily.sunset[0]);
+        }
 
-    setIcon(iconName);
+        weatherText.textContent = `${temp}°F`;
+        feelsLikeText.textContent = `Feels like ${feels}°F`;
+        windText.textContent = `Wind ${wind} mph`;
+        precipitationText.textContent = `Precipitation ${precip}%`;
+        conditionText.textContent = type;
 
-    localStorage.setItem("selectedPlace", JSON.stringify(place));
+        locationText.textContent =
+            `${place.name}${place.admin1 ? ", " + place.admin1 : ""}, ${place.country}`;
 
-    suggestionsBox.innerHTML = "";
+        setIcon(
+            type === "clear" ? "sun" :
+            type === "cloudy" ? "cloud" :
+            type === "rain" ? "cloud-rain" :
+            type === "snow" ? "cloud-snow" :
+            type === "storm" ? "cloud-lightning" :
+            "cloud"
+        );
+
+        setBackgroundVideo(getVideoName(type, dayTime));
+
+        localStorage.setItem("selectedPlace", JSON.stringify(place));
+
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// clock
+// -----------------------------
+// CLOCK
+// -----------------------------
+
 function updateClock() {
     const now = new Date();
 
